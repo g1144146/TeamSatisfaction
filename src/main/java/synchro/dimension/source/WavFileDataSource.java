@@ -13,11 +13,10 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import synchro.dimension.AudioStreamEntry;
-
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
-import synchro.dimension.Entry;
 
+import synchro.dimension.Entry;
+import synchro.dimension.AudioStreamEntry;
 /**
  * 
  * @author inagakikenichi
@@ -56,7 +55,8 @@ public class WavFileDataSource extends AbstractDataSource {
 	 * 音声データ列
 	 */
 	private IntArrayList data;
-
+	private AudioInputStream stream;
+	
 	/**
 	 * コンストラクタ。
 	 * @param path ファイルパス
@@ -66,6 +66,7 @@ public class WavFileDataSource extends AbstractDataSource {
 		super(DataSource.Type.WAV, path);
 		this.data = new IntArrayList();
 		try {
+			stream = AudioSystem.getAudioInputStream(new File(path));
 			this.entry = (AudioStreamEntry)entry;
 			readSoundFile(path);
 		} catch(UnsupportedAudioFileException | IOException e) {
@@ -85,6 +86,7 @@ public class WavFileDataSource extends AbstractDataSource {
 			throw new FileNotFoundException("the file ("+path+") is not found.");
 		}
 		System.out.println(file);
+		
 		try(AudioInputStream stream = AudioSystem.getAudioInputStream(file);
 			BufferedInputStream input = new BufferedInputStream(stream)) {
 			extractHeader(stream.getFormat());
@@ -123,6 +125,10 @@ public class WavFileDataSource extends AbstractDataSource {
 				data.add(bb.getInt() >> bitShift);
 			}
 		}
+	}
+
+	public AudioInputStream getStream() {
+		return stream;
 	}
 
 	@Override

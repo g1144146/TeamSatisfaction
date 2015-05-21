@@ -2,11 +2,6 @@
 
 ---------------
 
-# Issues
-* 変換後の音声データ数算出部分で、元のデータ数以上となる最小のデータ数にならない。
-
----------------
-
 # References
 
  * フーリエ変換部分のアルゴリズム
@@ -26,3 +21,6 @@
 
 * [GS Collections](https://github.com/goldmansachs/gs-collections)
 
+---------------
+
+# Issues

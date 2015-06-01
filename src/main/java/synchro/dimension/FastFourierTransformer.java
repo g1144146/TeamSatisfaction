@@ -1,12 +1,10 @@
 package synchro.dimension;
 
-import javax.sound.sampled.AudioInputStream;
-
 import java.io.IOException;
-
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
 
 import com.gs.collections.impl.list.mutable.FastList;
 
@@ -23,19 +21,36 @@ public class FastFourierTransformer {
 	 * 変換後のデータ数
 	 */
 	private int numOfData;
-
+	
 	/**
 	 * コンストラクタ。
 	 * @param stream 入力された音声ファイルのオーディオストリーム 
 	 */
 	public FastFourierTransformer(AudioInputStream stream) {
-		System.out.println(">> "+stream.getFrameLength());
 		try {
 			double[] realNumbers = getData(stream);
+			System.out.println(">> "+realNumbers.length);
 			setNumOfData(realNumbers.length);
 			setTransformedData(realNumbers);
-		} catch(IOException ex) {
-			Logger.getLogger(FastFourierTransformer.class.getName()).log(Level.SEVERE, null, ex);
+		} catch(IOException e) {
+			e.printStackTrace();
+			Logger.getLogger(FastFourierTransformer.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+
+	/**
+	 * コンストラクタ。
+	 * @param data 音声バイト列
+	 */
+	public FastFourierTransformer(byte[] data) {
+		try {
+			double[] realNumbers = getData(data);
+			System.out.println(">> "+realNumbers.length);
+			setNumOfData(realNumbers.length);
+			setTransformedData(realNumbers);
+		} catch(IOException e) {
+			e.printStackTrace();
+			Logger.getLogger(FastFourierTransformer.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}
 
@@ -46,12 +61,23 @@ public class FastFourierTransformer {
 	 * @throws IOException 
 	 */
 	private double[] getData(AudioInputStream stream) throws IOException {
+		System.out.println(">> "+stream.available());
 		byte[] byteData = new byte[stream.available()];
 		stream.read(byteData);
 		stream.close();
-		double[] realNumbers = new double[byteData.length];
-		for(int i = 0; i < byteData.length; i++) {
-			realNumbers[i] = (byteData[i] & 0xFF) - 128.0;
+		return getData(byteData);
+	}
+
+	/**
+	 * 音声バイト列を実数のデータ列にとして取得する。
+	 * @param data 音声バイト列
+	 * @return 音声データ列
+	 * @throws IOException 
+	 */
+	private double[] getData(byte[] data) throws IOException {
+		double[] realNumbers = new double[data.length];
+		for(int i = 0; i < realNumbers.length; i++) {
+			realNumbers[i] = (data[i] & 0xFF) - 128.0;
 		}
 		return realNumbers;
 	}
@@ -71,13 +97,15 @@ public class FastFourierTransformer {
 	}
 
 	/**
-	 * 変換後のデータ数を計算する。
+	 * 変換後のデータ数を計算する。</br>
+	 * データ数は常に2^nであり、nは</br>
+	 * dataSize <= 2^n </br>
+	 * を満たす最小の自然数。
 	 * @param dataSize 音声データのデータ数
 	 */
-	private void setNumOfData(int dataSize) {
+	private void setNumOfData(int dataSize) throws IOException {
 		int count = 1;
 		while(true) {
-			System.out.println(count +", " +(count >= dataSize));
 			if(count >= dataSize) {
 				numOfData = count;
 				return;
@@ -87,7 +115,8 @@ public class FastFourierTransformer {
 	}
 
 	/**
-	 * 音声データに高速フーリエ変換を適用する。
+	 * 音声データに高速フーリエ変換を適用する。</br>
+	 * バタフライ演算はしてない。
 	 */
 	public void executeFFT() {
 		double theta = -2 * Math.PI / numOfData;
@@ -129,7 +158,7 @@ public class FastFourierTransformer {
 
 	/**
 	 * 変換後のデータ列を返す。
-	 * @return 
+	 * @return 変換後のデータ列
 	 */
 	public FastList<ComplexNumber> getTransfomedData() {
 		return transformedData;

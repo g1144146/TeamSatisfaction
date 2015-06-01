@@ -1,7 +1,6 @@
 package synchro.dimension.source;
 
 import java.io.FileNotFoundException;
-
 import java.nio.file.Files;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -30,8 +29,9 @@ public class DataSourceBuilder {
 	}
 
 	/**
-	 * ファイルのデータソースをビルドする。
+	 * 音声ファイルのデータソースをビルドする。
 	 * @param fileName ファイル名
+	 * @param entry データソースのエントリ
 	 * @return ファイルのデータソース
 	 * @throws UnknownDataSourceException サポートしてない種類のファイルが入力された場合
 	 * @throws FileNotFoundException ファイルが見つからない場合
@@ -43,7 +43,7 @@ public class DataSourceBuilder {
 			if(fileName.endsWith(".wav")) {
 				return new WavFileDataSource(path.toString(), entry);
 			} else if(fileName.endsWith(".mp3")) {
-				return new MP3FileDataSource(path.toString());
+				return new MP3FileDataSource(path.toString(), entry);
 			}
 			throw new UnknownDataSourceException();
 		} else {

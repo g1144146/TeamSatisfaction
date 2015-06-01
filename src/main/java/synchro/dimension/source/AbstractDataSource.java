@@ -1,15 +1,17 @@
 package synchro.dimension.source;
 
+
+import synchro.dimension.Entry;
 /**
- *
+ * データソースクラスのアダプタクラス（みたいな扱いだと思う）
  * @author inagakikenichi
  */
 abstract class AbstractDataSource implements DataSource {
-	
+
 	/**
 	 * データ形式
 	 */
-	private DataSource.Type type;
+	private Entry.Type type;
 	/**
 	 * ファイルパス
 	 */
@@ -20,13 +22,13 @@ abstract class AbstractDataSource implements DataSource {
 	 * @param type データ形式
 	 * @param path ファイルパス
 	 */
-	public AbstractDataSource(DataSource.Type type, String path) {
+	public AbstractDataSource(Entry.Type type, String path) {
 		this.type = type;
 		this.path = path;
 	}
 
 	@Override
-	public DataSource.Type getType() {
+	public Entry.Type getType() {
 		return type;
 	}
 

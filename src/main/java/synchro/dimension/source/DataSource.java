@@ -2,32 +2,17 @@ package synchro.dimension.source;
 
 import synchro.dimension.Entry;
 /**
- * 
+ * データソースのクラス。
+ * データ形式・データ列などのデータソースを構成する要素を持つ（予定）。
  * @author inagakikenichi
  */
 public interface DataSource {
 
 	/**
-	 * 
-	 */
-	public static enum Type {
-		WAV(".wav"), MP3(".mp3");
-		private String extension;
-		
-		Type(String extension) {
-			this.extension = extension;
-		}
-		
-		String getExtension() {
-			return extension;
-		}
-	}
-
-	/**
 	 * データソースのデータ形式を返す。
 	 * @return ソースのデータ形式
 	 */
-	abstract DataSource.Type getType();
+	abstract Entry.Type getType();
 
 	/**
 	 * ファイルパスを返す。

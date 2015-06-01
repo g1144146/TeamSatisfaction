@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedInputStream;
 import java.nio.ByteBuffer;
-
 import java.nio.ByteOrder;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -18,7 +16,7 @@ import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import synchro.dimension.Entry;
 import synchro.dimension.AudioStreamEntry;
 /**
- * 
+ * wav形式の音声ファイルのデータソースクラス。
  * @author inagakikenichi
  */
 public class WavFileDataSource extends AbstractDataSource {
@@ -55,6 +53,9 @@ public class WavFileDataSource extends AbstractDataSource {
 	 * 音声データ列
 	 */
 	private IntArrayList data;
+	/**
+	 * オーディオストリーム
+	 */
 	private AudioInputStream stream;
 	
 	/**
@@ -63,10 +64,10 @@ public class WavFileDataSource extends AbstractDataSource {
 	 * @param entry データソースのエントリ
 	 */
 	public WavFileDataSource(String path, Entry entry) {
-		super(DataSource.Type.WAV, path);
+		super(Entry.Type.WAV, path);
 		this.data = new IntArrayList();
 		try {
-			stream = AudioSystem.getAudioInputStream(new File(path));
+			this.stream = AudioSystem.getAudioInputStream(new File(path));
 			this.entry = (AudioStreamEntry)entry;
 			readSoundFile(path);
 		} catch(UnsupportedAudioFileException | IOException e) {
@@ -127,6 +128,10 @@ public class WavFileDataSource extends AbstractDataSource {
 		}
 	}
 
+	/**
+	 * オーディストリームを返す。
+	 * @return オーディオストリーム
+	 */
 	public AudioInputStream getStream() {
 		return stream;
 	}

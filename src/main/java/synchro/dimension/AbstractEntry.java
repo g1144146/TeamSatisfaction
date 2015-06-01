@@ -3,7 +3,7 @@ package synchro.dimension;
 import synchro.dimension.source.DataSource;
 
 /**
- *
+ * エントリクラスのアダプタクラス（みたいな扱いだと思う）。
  * @author inagakikenichi
  */
 abstract class AbstractEntry implements Entry {

@@ -7,6 +7,8 @@
  * フーリエ変換部分のアルゴリズム
     * http://nodamushi.hatenablog.com/entry/20110611/1307830732
     * http://home.a00.itscom.net/hatada/_toc/asp.html
+ * 設計云々
+    * [Javamug](http://bitbucket.org/htamada/javamug)
 
 ---------------
 
